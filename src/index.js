@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import Authors from './authors'
+import Bugs from './bugs'
 
 ReactDOM.render(<BrowserRouter>
                   <div>
@@ -17,7 +18,7 @@ ReactDOM.render(<BrowserRouter>
                     </ul>
 
                     <Route exact path="/authors" component={Authors} />
-                    <Route exact path="/bugs" component={Authors} />
+                    <Route exact path="/bugs" component={Bugs} />
                   </div>
                 </BrowserRouter>,
                 document.getElementById('root'));
