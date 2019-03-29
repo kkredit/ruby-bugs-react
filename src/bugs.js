@@ -11,9 +11,12 @@ class BugForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fname: props.bug.fname,
+      title: props.bug.title,
+      description: props.bug.description,
+      issue_type: props.bug.issue_type,
+      priority: props.bug.priority,
+      status: props.bug.status,
       lname: props.bug.lname,
-      email: props.bug.email,
       id: props.bug.id
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -36,28 +39,35 @@ class BugForm extends React.Component {
     }
   }
 
+//
+//  title: this.state.title,
+//  description: this.state.description,
+//  issue_type: this.state.issue_type,
+//  priority: this.state.priority,
+//  status: this.state.status,
+//  lname: this.state.lname,
   render() {
     return (
       <div className="bug-form">
         <h1> Bugs </h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label>First Name</label>
-            <input type="text" className="form-control" autoComplete='given-name'
-              name="fname" id="fname" placeholder="First Name"
-              value={this.state.fname} onChange={this.handleInputChange}/>
+            <label>Title</label>
+            <input type="text" className="form-control" autoComplete='title'
+              name="title" id="title" placeholder="Title"
+              value={this.bug.title} onChange={this.handleInputChange}/>
           </div>
           <div className="form-group">
-            <label htmlFor="lname">Last Name</label>
-            <input type="text" className="form-control" autoComplete='family-name'
-              name="lname" id="lname" placeholder="Last Name"
-              value={this.state.lname} onChange={this.handleInputChange}/>
+            <label htmlFor="description">Description</label>
+            <input type="text" className="form-control" autoComplete=''
+              name="description" id="description" placeholder="Description"
+              value={this.bug.description} onChange={this.handleInputChange}/>
           </div>
           <div className="form-group">
-            <label htmlFor="email">Email address</label>
-              <input type="email" className="form-control" autoComplete='email'
-                name="email" id="email" placeholder="name@example.com"
-                value={this.state.email} onChange={this.handleInputChange}/>
+            <label htmlFor="lname">Last name</label>
+              <input type="lname" className="form-control" autoComplete=''
+                name="lname" id="lname" placeholder="Author last name"
+                value={this.bug.lname} onChange={this.handleInputChange}/>
           </div>
           {this.renderButtons()}
         </form>
@@ -76,16 +86,20 @@ class BugForm extends React.Component {
 
   handleSubmit(event) {
     this.props.onSubmit({
-      fname: this.state.fname,
+      title: this.state.title,
+      description: this.state.description,
+      issue_type: this.state.issue_type,
+      priority: this.state.priority,
+      status: this.state.status,
       lname: this.state.lname,
-      email: this.state.email,
       id: this.state.id,
     });
     event.preventDefault();
   }
 
   handleCancel(event) {
-    this.props.onCancel("new", {fname:"", lname:"", email:""});
+    this.props.onCancel("new", {title:"", description:"", issue_type:"",
+                                priority:"", status:"", lname:""});
     event.preventDefault();
   }
 }
@@ -94,9 +108,12 @@ const BugList = (props) => {
   const bugItems = props.bugs.map((bug) => {
     return (
       <BugListItem
-        fname={bug.fname}
+        title={bug.title}
+        description={bug.description}
+        issue_type={bug.issue_type}
+        priority={bug.priority}
+        status={bug.status}
         lname={bug.lname}
-        email={bug.email}
         id={bug.id}
         key={bug.id}
         onDelete={props.onDelete}
@@ -110,10 +127,14 @@ const BugList = (props) => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th className="col-md-3">First Name</th>
-            <th className="col-md-3">Last Name</th>
-            <th className="col-md-3">Email</th>
-            <th className="col-md-3">Actions</th>
+            <th class="col-md-2">Title</th>
+            <th class="col-md-2">Description</th>
+            <th class="col-md-2">Issue type</th>
+            <th class="col-md-2">Priority</th>
+            <th class="col-md-2">Status</th>
+            <th class="col-md-2">Author</th>
+            <th class="col-md-2">Actions</th>
+            <th colspan="2"></th>
           </tr>
         </thead>
         <tbody>
@@ -127,10 +148,13 @@ const BugList = (props) => {
 const BugListItem = (props) => {
   return (
     <tr>
-      <td className="col-md-3">{props.fname}</td>
-      <td className="col-md-3">{props.lname}</td>
-      <td className="col-md-3">{props.email}</td>
-      <td className="col-md-3 btn-toolbar">
+      <td class="col-md-2">{props.title}</td>
+      <td class="col-md-2">{props.description}</td>
+      <td class="col-md-2">{props.issue_type}</td>
+      <td class="col-md-2">{props.priority}</td>
+      <td class="col-md-2">{props.status}</td>
+      <td class="col-md-2">{props.lname}</td>
+      <td className="col-md-2 btn-toolbar">
         <button className="btn btn-success btn-sm" onClick={event => props.onEdit("edit",props)}>
           <i className="glyphicon glyphicon-pencil"></i> Edit
         </button>
@@ -149,7 +173,8 @@ export default class Bugs extends React.Component {
     this.state = {
       bugs: [],
       formMode: "new",
-      bug: {lname:"", fname:"", email:"", id: "9999999"}
+      bug: {title:"", description:"", issue_type:"", priority:"", status:"",
+            lname:"", id: "9999999"}
     };
     this.updateForm = this.updateForm.bind(this);
     this.clearForm = this.clearForm.bind(this);
@@ -193,7 +218,8 @@ export default class Bugs extends React.Component {
 
   clearForm() {
     console.log("clear form");
-    this.updateForm("new",{fname:"",lname:"",email:"", id: "99999999"});
+    this.updateForm("new",{title:"", description:"", issue_type:"", priority:"",
+                          status:"", lname:"", id: "9999999"});
   }
 
   loadBugs() {
