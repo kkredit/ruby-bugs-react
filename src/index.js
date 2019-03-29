@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import axios from 'axios';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 const API_BASE = 'http://localhost:8000/';
 
@@ -93,7 +94,7 @@ class AuthorForm extends React.Component {
 }
 
 const AuthorList = (props) => {
-	const authorItems = props.authors.map((author) => {
+  const authorItems = props.authors.map((author) => {
     return (
       <AuthorListItem
         fname={author.fname}
@@ -249,7 +250,20 @@ class Authors extends React.Component {
     }
 }
 
-ReactDOM.render(<Authors />, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter>
+                  <div>
+                    <h1>Welcome to YABT!</h1>
+                    <ul>
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/authors">Authors</Link></li>
+                      <li><Link to="/bugs">Bugs</Link></li>
+                    </ul>
+
+                    <Route exact path="/authors" component={Authors} />
+                    <Route exact path="/bugs" component={Authors} />
+                  </div>
+                </BrowserRouter>,
+                document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
