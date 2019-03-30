@@ -16,7 +16,6 @@ class BugForm extends React.Component {
       issue_type: props.bug.issue_type,
       priority: props.bug.priority,
       status: props.bug.status,
-      lname: props.bug.lname,
       id: props.bug.id
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -39,13 +38,6 @@ class BugForm extends React.Component {
     }
   }
 
-//
-//  title: this.state.title,
-//  description: this.state.description,
-//  issue_type: this.state.issue_type,
-//  priority: this.state.priority,
-//  status: this.state.status,
-//  lname: this.state.lname,
   render() {
     return (
       <div className="bug-form">
@@ -55,19 +47,46 @@ class BugForm extends React.Component {
             <label>Title</label>
             <input type="text" className="form-control" autoComplete='title'
               name="title" id="title" placeholder="Title"
-              value={this.bug.title} onChange={this.handleInputChange}/>
+              value={this.state.title} onChange={this.handleInputChange}/>
           </div>
           <div className="form-group">
             <label htmlFor="description">Description</label>
-            <input type="text" className="form-control" autoComplete=''
+            <textarea type="textarea" className="form-control" autoComplete=''
               name="description" id="description" placeholder="Description"
-              value={this.bug.description} onChange={this.handleInputChange}/>
+              value={this.state.description} onChange={this.handleInputChange}/>
           </div>
           <div className="form-group">
-            <label htmlFor="lname">Last name</label>
-              <input type="lname" className="form-control" autoComplete=''
-                name="lname" id="lname" placeholder="Author last name"
-                value={this.bug.lname} onChange={this.handleInputChange}/>
+            <label htmlFor="issue_type">Issue type</label>
+              <select type="select" className="form-control" autoComplete=''
+                name="issue_type" id="issue_type" placeholder="Issue type"
+                value={this.state.issue_type ? this.state.issue_type : "issue"}
+                onChange={this.handleInputChange}>
+                <option value="issue">Issue</option>
+                <option value="enhancement">Enhancement</option>
+                <option value="feature">Feature</option>
+              </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+              <select type="select" className="form-control" autoComplete=''
+                name="priority" id="priority" placeholder="Priority"
+                value={this.state.priority ? this.state.priority : "Low"}
+                onChange={this.handleInputChange}>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="status">Status</label>
+              <select type="select" className="form-control" autoComplete=''
+                name="status" id="status" placeholder="Status"
+                value={this.state.status ? this.state.status : "Open"}
+                onChange={this.handleInputChange}>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+                <option value="monitor">Monitor</option>
+              </select>
           </div>
           {this.renderButtons()}
         </form>
@@ -91,15 +110,13 @@ class BugForm extends React.Component {
       issue_type: this.state.issue_type,
       priority: this.state.priority,
       status: this.state.status,
-      lname: this.state.lname,
-      id: this.state.id,
     });
     event.preventDefault();
   }
 
   handleCancel(event) {
     this.props.onCancel("new", {title:"", description:"", issue_type:"",
-                                priority:"", status:"", lname:""});
+                                priority:"", status:""});
     event.preventDefault();
   }
 }
@@ -113,7 +130,6 @@ const BugList = (props) => {
         issue_type={bug.issue_type}
         priority={bug.priority}
         status={bug.status}
-        lname={bug.lname}
         id={bug.id}
         key={bug.id}
         onDelete={props.onDelete}
@@ -132,7 +148,6 @@ const BugList = (props) => {
             <th class="col-md-2">Issue type</th>
             <th class="col-md-2">Priority</th>
             <th class="col-md-2">Status</th>
-            <th class="col-md-2">Author</th>
             <th class="col-md-2">Actions</th>
             <th colspan="2"></th>
           </tr>
@@ -153,7 +168,6 @@ const BugListItem = (props) => {
       <td class="col-md-2">{props.issue_type}</td>
       <td class="col-md-2">{props.priority}</td>
       <td class="col-md-2">{props.status}</td>
-      <td class="col-md-2">{props.lname}</td>
       <td className="col-md-2 btn-toolbar">
         <button className="btn btn-success btn-sm" onClick={event => props.onEdit("edit",props)}>
           <i className="glyphicon glyphicon-pencil"></i> Edit
@@ -174,7 +188,7 @@ export default class Bugs extends React.Component {
       bugs: [],
       formMode: "new",
       bug: {title:"", description:"", issue_type:"", priority:"", status:"",
-            lname:"", id: "9999999"}
+            id: "9999999"}
     };
     this.updateForm = this.updateForm.bind(this);
     this.clearForm = this.clearForm.bind(this);
@@ -219,7 +233,7 @@ export default class Bugs extends React.Component {
   clearForm() {
     console.log("clear form");
     this.updateForm("new",{title:"", description:"", issue_type:"", priority:"",
-                          status:"", lname:"", id: "9999999"});
+                          status:"", id: "9999999"});
   }
 
   loadBugs() {
