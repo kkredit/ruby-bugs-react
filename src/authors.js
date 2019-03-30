@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000/';
+const API_BASE = 'https://bugtracker-kk.herokuapp.com';
 
 class AuthorForm extends React.Component {
 
